@@ -1,0 +1,39 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - go-version-file: go.mod
+          - go-version: stable
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version: ${{ matrix.go-version }}
+          go-version-file: ${{ matrix.go-version-file }}
+      - run: go vet ./...
+      - run: go test -race ./...
+      - name: Fuzz (short)
+        run: go test -run='^$' -fuzz=FuzzValidate -fuzztime=30s
+
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+      - uses: golangci/golangci-lint-action@v8
+        with:
+          version: v2.13
