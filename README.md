@@ -32,8 +32,9 @@ permit the whole `\x{00A0}-\x{D7FF}` range in the local part.
 go get github.com/wenlingang/go-emailvalidator
 ```
 
-Requires Go 1.26 or newer (the minimum required by the current
-`golang.org/x/net` and `golang.org/x/text`).
+Requires Go 1.25 or newer. Dependencies are kept at modest versions of
+`golang.org/x/net` and `golang.org/x/text` so the library does not force
+upgrades on its users.
 
 ## Quick start
 
